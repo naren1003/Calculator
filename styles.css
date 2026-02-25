@@ -1,0 +1,21 @@
+.row{
+    display: flex;
+}
+
+.display{
+    width:80px;
+    height: 30px;
+    border:2px;
+}
+
+button{
+    padding: 20px;
+    height:30px;
+    width:20px;
+    margin:2px;
+    background-color: lightgray;
+}
+
+button:hover{
+    background-color: grey;
+}
