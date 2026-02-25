@@ -61,3 +61,4 @@ The calculator is fully responsive and works on:
 
 ## Live Demo
 
+https://naren1003.github.io/Calculator/
