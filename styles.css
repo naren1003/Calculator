@@ -1,5 +1,5 @@
 body{
-    align-items: center;
+    text-align: center;
 }
 
 .row{
@@ -11,6 +11,16 @@ body{
     width:262px;
     height: 70px;
     border:2px solid black;
+    display:inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.numbers{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 button{
