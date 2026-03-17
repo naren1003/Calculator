@@ -107,3 +107,18 @@ function answer(){
 
     // when entering input after calc it should show "ans" and should hold the previous result
 };
+
+const buttons = document.querySelectorAll('.keyButton');
+
+function handleKeyDown(event) {
+    // 'this' refers to the button element the listener is attached to
+    if (this.getAttribute('data-key') === event.key) {
+        console.log(`Key ${event.key} pressed for button: ${this.textContent}`);
+        // Add specific action here
+    }
+}
+
+// Loop through the NodeList and add the event listener to each button
+buttons.forEach(button => {
+    button.addEventListener('keydown', handleKeyDown);
+});
