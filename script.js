@@ -6,6 +6,7 @@ var a = -1;
 var b = -1;
 var isB = false;
 var twoSymbols = false;
+var operator = "";
 
 function calc(btnElement){
     var val = btnElement.value;
@@ -28,6 +29,7 @@ function calc(btnElement){
             output.innerHTML = result;
             isB = true;
             twoSymbols = true;
+            operator = symbols.get(val);
         }
     }else if(val == "clear"){
         result = "";
@@ -44,9 +46,13 @@ function calc(btnElement){
             isB = false;
         } 
         if(isB){
-            //update b
+            let lastDigit = b%10;
+            b = b-lastDigit;
+            b = b/10;
         }else{
-            //update a
+            let lastDigit = a%10;
+            a = a-lastDigit;
+            a = a/10;
         }
     }else if(val == "0" ||val == "1" ||val == "2" ||val == "3" ||val == "4" ||val == "5" ||
         val == "6" ||val == "7" ||val == "8" ||val == "9"){
@@ -63,7 +69,7 @@ function calc(btnElement){
             a = a*10 + Number(val);
         }
     }else if(val == "neg"){
-
+        //negation
     }else if(val == "decimal"){
         result+=".";
         output.innerHTML = result;
@@ -76,5 +82,28 @@ function calc(btnElement){
 };
 
 function answer(){
-    if(a == -1 || b == -1){alert("input not given");}
+    if(a == -1 || b == -1){alert("input not given"); return;}
+    switch(operator){
+        case "%":
+            result = a%b; // change to percentage at last
+            break;
+        case "/":
+            result = a/b;
+            break;
+        case "*":
+            result = a*b;
+            break;
+        case "+":
+            result = a+b;
+            break;
+        case "-":
+            result = a-b;
+            break;
+    }
+    operator = "";
+    output.innerHTML = result;
+    a = Number(result);
+    b = -1;
+
+    // when entering input after calc it should show "ans" and should hold the previous result
 };
