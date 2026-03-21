@@ -69,7 +69,18 @@ function calc(btnElement){
             a = a*10 + Number(val);
         }
     }else if(val == "neg"){
-        //negation
+        twoSymbols = false;
+        result+="00";
+        output.innerHTML = result;
+        if(isB){
+            if(b == -1)
+                b = 0;
+            b = b*100;
+        }else{
+            if(a == -1)
+                a = 0;
+            a = a*100;
+        }
     }else if(val == "decimal"){
         result+=".";
         output.innerHTML = result;
@@ -85,7 +96,7 @@ function answer(){
     if(a == -1 || b == -1){alert("input not given"); return;}
     switch(operator){
         case "%":
-            result = a%b; // change to percentage at last
+            result = a/b * 100; 
             break;
         case "/":
             result = a/b;
@@ -107,18 +118,3 @@ function answer(){
 
     // when entering input after calc it should show "ans" and should hold the previous result
 };
-
-const buttons = document.querySelectorAll('.keyButton');
-
-function handleKeyDown(event) {
-    // 'this' refers to the button element the listener is attached to
-    if (this.getAttribute('data-key') === event.key) {
-        console.log(`Key ${event.key} pressed for button: ${this.textContent}`);
-        // Add specific action here
-    }
-}
-
-// Loop through the NodeList and add the event listener to each button
-buttons.forEach(button => {
-    button.addEventListener('keydown', handleKeyDown);
-});
