@@ -1,5 +1,30 @@
 const output = document.getElementById("display");
 let expression = "";
+let isResultInvalid = false;
+
+document.addEventListener("keydown", handleKey);
+const keyMap = {
+    "+": "add",
+    "-": "sub",
+    "*": "mul",
+    "/": "divide",
+    "%": "perc",
+    ".": "decimal",
+    "Backspace": "del",
+    "Escape": "clear"
+};
+
+function handleKey(e) {
+    const key = e.key;
+
+    if (!isNaN(key)) {
+        calc({ value: key });
+    } else if (keyMap[key]) {
+        calc({ value: keyMap[key] });
+    } else if (key === "Enter") {
+        answer();
+    }
+}
 
 const symbols = {
     perc: "%",
@@ -11,9 +36,18 @@ const symbols = {
 
 function calc(btn) {
     const val = btn.value;
-
+    if (isResultInvalid) {
+        if (val === "clear") {
+            expression = "";
+            output.innerText = "";
+            isResultInvalid = false;
+            return;
+        } else {
+            expression = "";
+            isResultInvalid = false;
+        }
+    }
     if (symbols[val]) {
-        //prevent double operators
         if (/[+\-*/%]$/.test(expression)) return;
         expression += symbols[val];
     } 
@@ -21,13 +55,14 @@ function calc(btn) {
         expression = "";
     } 
     else if (val === "del") {
-        expression = expression.slice(0, -1); //deletes the last char
+        expression = expression.slice(0, -1);
     } 
     else if (val === "decimal") {
-        if (!/\.\d*$/.test(expression)) {
+        const lastNumber = expression.split(/[+\-*/%]/).pop();
+        if (!lastNumber.includes(".")) {
             expression += ".";
         }
-    } 
+    }
     else if (val === "neg") {
         expression = "-" + expression;
     } 
@@ -40,11 +75,22 @@ function calc(btn) {
 
 function answer() {
     try {
-        let result = eval(expression); // calculates itself
+        let result = eval(expression);
+
+        if (!isFinite(result)) {
+            output.innerText = result;
+            expression = "";
+            isResultInvalid = true;
+            return;
+        }
+
         output.innerText = result;
         expression = result.toString();
+        isResultInvalid = false;
+
     } catch {
         output.innerText = "Error";
         expression = "";
+        isResultInvalid = true;
     }
 }
