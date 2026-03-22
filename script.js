@@ -100,3 +100,15 @@ function answer() {
         isResultInvalid = true;
     }
 }
+
+function setTheme(theme) {
+    document.body.classList.remove("dark");
+    if (theme) document.body.classList.add(theme);
+
+    localStorage.setItem("theme", theme);
+}
+
+window.onload = () => {
+    const saved = localStorage.getItem("theme");
+    if (saved) setTheme(saved);
+};
