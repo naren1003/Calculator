@@ -1,6 +1,7 @@
 const output = document.getElementById("display");
 let expression = "";
 let isResultInvalid = false;
+let doubleNegation = false;
 
 document.addEventListener("keydown", handleKey);
 const keyMap = {
@@ -48,12 +49,14 @@ function calc(btn) {
         }
     }
     if (symbols[val]) {
+        if (expression === "" && val !== "sub") return;
         if (/[+\-*/%]$/.test(expression)) return;
         expression += symbols[val];
     } 
     else if (val === "clear") {
         expression = "";
-    } 
+        isResultInvalid = false;
+    }
     else if (val === "del") {
         expression = expression.slice(0, -1);
     } 
@@ -64,7 +67,9 @@ function calc(btn) {
         }
     }
     else if (val === "neg") {
+        if(!doubleNegation)
         expression = "-" + expression;
+        doubleNegation = true;
     } 
     else {
         expression += val;
@@ -87,6 +92,7 @@ function answer() {
         output.innerText = result;
         expression = result.toString();
         isResultInvalid = false;
+        doubleNegation = false;
 
     } catch {
         output.innerText = "Error";
