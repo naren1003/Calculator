@@ -1,120 +1,50 @@
-var output = document.getElementById("display");
-var btn = document.querySelectorAll("button");
+const output = document.getElementById("display");
+let expression = "";
 
-var result = "";
-var a = -1;
-var b = -1;
-var isB = false;
-var twoSymbols = false;
-var operator = "";
-
-function calc(btnElement){
-    var val = btnElement.value;
-    const symbols = new Map([
-        ["perc","%"],
-        ["divide","/"],
-        ["mul","*"],
-        ["sub","-"],
-        ["add","+"]
-    ]);
-
-
-    if(val == "perc" ||val == "divide" ||val == "mul" ||val == "sub" ||val == "add"){
-        if(a == -1){
-            alert("Select an input first");
-        }else if(twoSymbols){
-            alert("two symbols selected");
-        }else{
-            result+=symbols.get(val);
-            output.innerHTML = result;
-            isB = true;
-            twoSymbols = true;
-            operator = symbols.get(val);
-        }
-    }else if(val == "clear"){
-        result = "";
-        output.innerHTML = result;
-        a = -1;
-        b = -1;
-        isB = false;
-        twoSymbols = false;
-    }else if(val == "del"){
-        result = result.slice(0,-1);
-        output.innerHTML = result;
-        if(twoSymbols){
-            twoSymbols = false;
-            isB = false;
-        } 
-        if(isB){
-            let lastDigit = b%10;
-            b = b-lastDigit;
-            b = b/10;
-        }else{
-            let lastDigit = a%10;
-            a = a-lastDigit;
-            a = a/10;
-        }
-    }else if(val == "0" ||val == "1" ||val == "2" ||val == "3" ||val == "4" ||val == "5" ||
-        val == "6" ||val == "7" ||val == "8" ||val == "9"){
-        twoSymbols = false;
-        result+=val;
-        output.innerHTML = result;
-        if(isB){
-            if(b == -1)
-                b = 0;
-            b = b*10 + Number(val);
-        }else{
-            if(a == -1)
-                a = 0;
-            a = a*10 + Number(val);
-        }
-    }else if(val == "neg"){
-        twoSymbols = false;
-        result+="00";
-        output.innerHTML = result;
-        if(isB){
-            if(b == -1)
-                b = 0;
-            b = b*100;
-        }else{
-            if(a == -1)
-                a = 0;
-            a = a*100;
-        }
-    }else if(val == "decimal"){
-        result+=".";
-        output.innerHTML = result;
-        if(isB){
-            //update B
-        }else{
-            // update a
-        }
-    }
+const symbols = {
+    perc: "%",
+    divide: "/",
+    mul: "*",
+    sub: "-",
+    add: "+"
 };
 
-function answer(){
-    if(a == -1 || b == -1){alert("input not given"); return;}
-    switch(operator){
-        case "%":
-            result = a/b * 100; 
-            break;
-        case "/":
-            result = a/b;
-            break;
-        case "*":
-            result = a*b;
-            break;
-        case "+":
-            result = a+b;
-            break;
-        case "-":
-            result = a-b;
-            break;
-    }
-    operator = "";
-    output.innerHTML = result;
-    a = Number(result);
-    b = -1;
+function calc(btn) {
+    const val = btn.value;
 
-    // when entering input after calc it should show "ans" and should hold the previous result
-};
+    if (symbols[val]) {
+        //prevent double operators
+        if (/[+\-*/%]$/.test(expression)) return;
+        expression += symbols[val];
+    } 
+    else if (val === "clear") {
+        expression = "";
+    } 
+    else if (val === "del") {
+        expression = expression.slice(0, -1); //deletes the last char
+    } 
+    else if (val === "decimal") {
+        if (!/\.\d*$/.test(expression)) {
+            expression += ".";
+        }
+    } 
+    else if (val === "neg") {
+        expression = "-" + expression;
+    } 
+    else {
+        expression += val;
+    }
+
+    output.innerText = expression;
+}
+
+function answer() {
+    try {
+        let result = eval(expression); // calculates itself
+        output.innerText = result;
+        expression = result.toString();
+    } catch {
+        output.innerText = "Error";
+        expression = "";
+    }
+}
